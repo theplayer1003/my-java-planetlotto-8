@@ -1,4 +1,4 @@
-package planetlotto.view;
+package planetlotto.ui.view;
 
 import java.util.List;
 import java.util.Map;

@@ -1,4 +1,4 @@
-package planetlotto.view;
+package planetlotto.ui.view;
 
 import camp.nextstep.edu.missionutils.Console;
 
