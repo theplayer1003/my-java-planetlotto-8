@@ -1,8 +1,14 @@
 package planetlotto.domain.ticket;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.EnumMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
+import planetlotto.domain.match.LottoResult;
+import planetlotto.domain.match.Prize;
+import planetlotto.domain.win.WinningLotto;
 
 public class Tickets {
     private static final int ONE_TICKET_PRICE = 500;
@@ -29,7 +35,18 @@ public class Tickets {
         return new Tickets(tickets);
     }
 
+    public LottoResult matchAll(WinningLotto winningLotto) {
+        EnumMap<Prize, Integer> resultMap = new EnumMap<>(Prize.class);
+
+        for (LottoTicket ticket : tickets) {
+            final Prize prize = winningLotto.match(ticket);
+            resultMap.merge(prize, 1, Integer::sum);
+        }
+
+        return new LottoResult(resultMap);
+    }
+
     public List<LottoTicket> getTickets() {
-        return tickets;
+        return Collections.unmodifiableList(tickets);
     }
 }

@@ -2,10 +2,10 @@
 
 # 기능구현 목록
 
-- [ ] 로또 티켓
-    - [ ] 로또 티켓은 중복되지 않은 5개의 로또 번호를 가진다
+- [x] 로또 티켓
+    - [x] 로또 티켓은 중복되지 않은 5개의 로또 번호를 가진다
     - [x] 로또 번호는 1 부터 30 사이의 숫자이다
-    - [ ] 로또 1장의 가격은 500원 이다.
+    - [x] 로또 1장의 가격은 500원 이다.
 
 - [ ] 당첨 번호
     - [ ] 당첨 번호는 중복되지 않은 숫자 5개와 보너스 번호 1개를 가진다
@@ -40,7 +40,7 @@
 - `LottoController` 가 `InputView` 에게 보너스 번호를 요청한다
     - `InputView` 가 `inputview.askBonusNumber()` 를 실행해 `int` 를 반환한다
 - `LottoController` 가 `LottoService` 에게 `List<Integer>` 와 `int` 와 `LottoTicket` 를 넘겨주며 당첨 결과를 요청한다
-    - `LottoService` 는 `WinningLotto` 를 생성해 반환한다
+    - `LottoService` 는 `LottoResult` 를 생성해 반환한다
 
 # 도메인 식별
 
