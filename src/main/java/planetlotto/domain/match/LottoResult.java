@@ -15,6 +15,10 @@ public class LottoResult {
     public Map<Integer, Integer> getStatistics() {
         Map<Integer, Integer> stat = new HashMap<>();
 
+        for (Prize prize : Prize.values()) {
+            stat.put(prize.getIndex(), 0);
+        }
+
         for (Entry<Prize, Integer> entry : resultMap.entrySet()) {
             stat.put(entry.getKey().getIndex(), entry.getValue());
         }
