@@ -18,6 +18,8 @@ repositories {
 
 dependencies {
     implementation 'com.github.woowacourse-projects:mission-utils:1.2.0'
+    implementation 'com.mysql:mysql-connector-j:8.3.0'
+    implementation 'com.zaxxer:HikariCP:5.1.0'
 }
 
 test {
