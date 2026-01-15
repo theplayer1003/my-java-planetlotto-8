@@ -8,18 +8,18 @@ import java.sql.Statement;
 import java.sql.Timestamp;
 import java.util.List;
 import javax.sql.DataSource;
-import planetlotto.domain.ticket.LottoNumber;
 import planetlotto.domain.ticket.LottoTicket;
 import planetlotto.domain.ticket.Purchase;
+import planetlotto.infra.config.DataSourceConfig;
 
 public class JdbcLottoRepository {
     private final DataSource dataSource;
 
-    public JdbcLottoRepository(DataSource dataSource) {
-        this.dataSource = dataSource;
+    public JdbcLottoRepository() {
+        this.dataSource = DataSourceConfig.getDataSource();
     }
 
-    public void save(Purchase purchase) throws SQLException {
+    public Long save(Purchase purchase) {
         Connection conn = null;
 
         try {
@@ -30,26 +30,17 @@ public class JdbcLottoRepository {
             saveLottoTickets(conn, purchase);
 
             conn.commit();
+
+
         } catch (SQLException e) {
-            try {
-                if (conn != null) {
-                    conn.rollback();
-                }
-            } catch (SQLException e2) {
-                e2.printStackTrace();
-            }
+            rollback(conn);
 
             e.printStackTrace();
         } finally {
-            if (conn != null) {
-                try {
-                    conn.setAutoCommit(true);
-                    conn.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
+            close(conn);
         }
+
+        return purchase.getId();
     }
 
     private void savePurchase(Connection conn, Purchase purchase) throws SQLException {
@@ -84,15 +75,45 @@ public class JdbcLottoRepository {
                 try (final ResultSet rs = pstmt.getGeneratedKeys()) {
                     if (rs.next()) {
                         final long ticketId = rs.getLong(1);
-
-                        saveLottoNumbers(conn, ticketId, ticket.getLottoNumbers());
+                        ticket.assignId(ticketId);
+                        saveLottoNumbers(conn, ticketId, ticket.getNumbers());
                     }
                 }
             }
         }
     }
 
-    private void saveLottoNumbers(Connection conn, long ticketId, List<LottoNumber> lottoNumbers) {
+    private void saveLottoNumbers(Connection conn, long ticketId, List<Integer> lottoNumbers) throws SQLException {
+        String sql = "INSERT INTO lotto_number (lotto_id, number) VALUES (?, ?)";
 
+        try (final PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            for (Integer lottoNumber : lottoNumbers) {
+                pstmt.setLong(1, ticketId);
+                pstmt.setInt(2, lottoNumber);
+                pstmt.addBatch();
+            }
+            pstmt.executeBatch();
+        }
+    }
+
+    private static void rollback(Connection conn) {
+        try {
+            if (conn != null) {
+                conn.rollback();
+            }
+        } catch (SQLException e2) {
+            e2.printStackTrace();
+        }
+    }
+
+    private static void close(Connection conn) {
+        if (conn != null) {
+            try {
+                conn.setAutoCommit(true);
+                conn.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }

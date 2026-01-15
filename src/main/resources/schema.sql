@@ -11,6 +11,7 @@ CREATE TABLE purchase (
 CREATE TABLE lotto (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     purchase_id BIGINT NOT NULL,
+    created_at DATETIME(6) NOT NULL,
 
     FOREIGN KEY (purchase_id) REFERENCES purchase (id) ON DELETE CASCADE
 );

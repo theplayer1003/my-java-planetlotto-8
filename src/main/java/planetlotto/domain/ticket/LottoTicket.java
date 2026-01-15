@@ -89,4 +89,16 @@ public class LottoTicket {
                 .sorted()
                 .toList();
     }
+
+    public void assignId(long ticketId) {
+        if (this.id != null) {
+
+        }
+
+        this.id = ticketId;
+    }
+
+    public Long getId() {
+        return this.id;
+    }
 }
