@@ -9,6 +9,7 @@ import java.util.Set;
 
 public class LottoTicket {
     private Long id;
+    private Long purchase_id;
     private LocalDateTime createdAt;
 
     private final List<LottoNumber> lottoNumbers;

@@ -1,0 +1,24 @@
+DROP TABLE IF EXISTS lotto_number;
+DROP TABLE IF EXISTS lotto;
+DROP TABLE IF EXISTS purchase;
+
+CREATE TABLE purchase (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    amount INT NOT NULL,
+    purchase_date DATETIME(6) NOT NULL
+);
+
+CREATE TABLE lotto (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    purchase_id BIGINT NOT NULL,
+
+    FOREIGN KEY (purchase_id) REFERENCES purchase (id) ON DELETE CASCADE
+);
+
+CREATE TABLE lotto_number (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    lotto_id BIGINT NOT NULL,
+    number INT NOT NULL,
+
+    FOREIGN KEY (lotto_id) REFERENCES lotto (id) ON DELETE CASCADE
+);
