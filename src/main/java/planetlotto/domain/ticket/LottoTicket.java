@@ -26,6 +26,11 @@ public class LottoTicket {
         this.id = id;
     }
 
+    public LottoTicket(long ticketId, List<LottoNumber> numbers) {
+        this.lottoNumbers = numbers;
+        this.id = ticketId;
+    }
+
     public static LottoTicket of(List<Integer> numbers) {
         validateDuplicate(numbers);
         final List<LottoNumber> lottoNumbers = toLottoNumbers(numbers);
@@ -50,6 +55,10 @@ public class LottoTicket {
         }
 
         return lottoNumbers;
+    }
+
+    public static LottoTicket reconstruct(long ticketId, List<LottoNumber> numbers) {
+        return new LottoTicket(ticketId, numbers);
     }
 
     public boolean contains(LottoNumber target) {

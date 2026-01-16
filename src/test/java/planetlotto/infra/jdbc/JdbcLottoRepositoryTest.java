@@ -56,14 +56,33 @@ class JdbcLottoRepositoryTest {
 
         final Long savedId = repository.save(purchase);
 
-
         assertThat(savedId).isNotNull();
-
         assertThat(purchase.getId()).isEqualTo(savedId);
 
         final List<LottoTicket> savedTickets = purchase.getTickets().getTickets();
         assertThat(savedTickets).hasSize(4);
         assertThat(savedTickets.get(0).getId()).isNotNull();
         assertThat(savedTickets.get(1).getId()).isNotNull();
+    }
+
+    @Test
+    void findById(){
+        final Tickets tickets = createTickets(createLottoTicket(1, 2, 3, 4, 5), createLottoTicket(1, 2, 3, 4, 5),
+                createLottoTicket(1, 2, 3, 4, 8), createLottoTicket(10, 11, 12, 13, 14));
+
+        final Purchase save = Purchase.buy(2000, tickets);
+
+        final Long savedId = repository.save(save);
+
+        final Purchase load = repository.findById(savedId);
+
+        assertThat(load.getId()).isEqualTo(savedId);
+        assertThat(load.getAmount()).isEqualTo(load.getAmount());
+
+        assertThat(load.getTickets().getTickets()).hasSize(4);
+        final LottoTicket lottoTicket = load.getTickets().getTickets().get(0);
+        assertThat(lottoTicket.getLottoNumbers())
+                .extracting("number")
+                .containsExactlyInAnyOrder(1,2,3,4,5);
     }
 }
